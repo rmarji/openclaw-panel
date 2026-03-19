@@ -1,23 +1,45 @@
 export function Footer() {
   return (
-    <footer className="border-t border-white/5">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+    <footer className="border-t border-[var(--border)]">
+      <div className="mx-auto max-w-6xl px-6 py-12 lg:px-8">
+        <div className="flex flex-col items-center justify-between gap-8 sm:flex-row">
+          {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600">
-              <span className="text-xs font-bold text-white">CG</span>
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--accent)]">
+              <span
+                className="text-[9px] font-bold tracking-wider text-white"
+                style={{ fontFamily: "var(--font-mono)" }}
+              >
+                CG
+              </span>
             </div>
-            <span className="text-sm font-semibold text-zinc-400">ClawGeeks</span>
+            <span
+              className="text-[13px] font-medium text-[var(--text-tertiary)]"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              ClawGeeks
+            </span>
           </div>
 
-          <div className="flex gap-8 text-sm text-zinc-600">
-            <a href="#" className="transition hover:text-zinc-300">Privacy</a>
-            <a href="#" className="transition hover:text-zinc-300">Terms</a>
-            <a href="#" className="transition hover:text-zinc-300">Status</a>
-            <a href="#" className="transition hover:text-zinc-300">Contact</a>
+          {/* Links */}
+          <div className="flex gap-8">
+            {["Privacy", "Terms", "Status", "Contact"].map((link) => (
+              <a
+                key={link}
+                href="#"
+                className="text-[12px] text-[var(--text-tertiary)] transition-colors duration-200 hover:text-[var(--text-secondary)]"
+                style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.04em" }}
+              >
+                {link}
+              </a>
+            ))}
           </div>
 
-          <p className="text-sm text-zinc-600">
+          {/* Copyright */}
+          <p
+            className="text-[12px] text-[var(--text-tertiary)]"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
             &copy; {new Date().getFullYear()} ClawGeeks
           </p>
         </div>

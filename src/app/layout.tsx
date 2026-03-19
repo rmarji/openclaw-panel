@@ -1,21 +1,30 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Instrument_Serif, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
   subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
   title: "ClawGeeks — AI Agents That Work For You",
   description:
-    "Deploy personal AI agents with Telegram, Slack, and more. Smart model routing, tool integrations, and 24/7 availability.",
+    "Deploy personal AI agents with Telegram, Slack, Gmail, GitHub and more. Smart model routing, tool integrations, and 24/7 availability.",
 };
 
 export default function RootLayout({
@@ -26,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased mesh-gradient noise`}
+        className={`${instrumentSerif.variable} ${dmSans.variable} ${jetbrainsMono.variable} bg-atmosphere`}
       >
         {children}
       </body>
