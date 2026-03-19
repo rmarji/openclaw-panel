@@ -19,8 +19,10 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-# sql.js WASM binary needed at runtime
-COPY --from=builder /app/node_modules/sql.js/dist/sql-wasm.wasm ./node_modules/sql.js/dist/sql-wasm.wasm
+# sql.js + node-ssh need full packages at runtime (not traced by Next.js standalone)
+COPY --from=builder /app/node_modules/sql.js ./node_modules/sql.js
+COPY --from=builder /app/node_modules/node-ssh ./node_modules/node-ssh
+COPY --from=builder /app/node_modules/ssh2 ./node_modules/ssh2
 
 RUN mkdir -p /data && chown nextjs:nodejs /data
 
