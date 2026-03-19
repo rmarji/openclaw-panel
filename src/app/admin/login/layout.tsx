@@ -1,6 +1,6 @@
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="fixed inset-0 z-50 login-override">
+    <div className="fixed inset-0 z-[100] bg-[#050510]" style={{ isolation: "isolate" }}>
       {children}
     </div>
   );
