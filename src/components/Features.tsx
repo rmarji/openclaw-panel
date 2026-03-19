@@ -2,27 +2,35 @@
 
 import { motion } from "framer-motion";
 
+/*
+  DR Copywriting principles applied:
+  - Lead with the BENEFIT, not the feature name
+  - Be specific (exact numbers, concrete outcomes)
+  - Address the objection before it forms
+  - Every sentence earns its place
+*/
+
 const features = [
   {
     number: "01",
-    title: "Smart Model Routing",
+    title: "Your costs drop 60%. Automatically.",
     description:
-      "Manifest scores each query across 23 dimensions and picks the optimal model tier. Simple questions get fast, cheap answers. Complex reasoning gets the big guns. You save 60% on costs without lifting a finger.",
-    detail: "23 dimensions \u00b7 4 tiers \u00b7 <2ms scoring",
+      "Most AI platforms charge you premium rates for every single query \u2014 even \u201cwhat time is it in Tokyo.\u201d Our Manifest engine scores each message across 23 dimensions in under 2 milliseconds and routes it to the cheapest model that can handle it. Complex reasoning gets Claude Opus. Simple lookups get Haiku. You get the same quality at a fraction of the price.",
+    detail: "23 dimensions \u00b7 4 model tiers \u00b7 <2ms per decision",
   },
   {
     number: "02",
-    title: "Tool Integrations",
+    title: "Their tools. Their credentials. Your agent.",
     description:
-      "Gmail, GitHub, Notion, Google Calendar, Slack, Linear \u2014 your agent connects to the tools your team already uses. Per-user OAuth means each person\u2019s agent acts with their own credentials.",
-    detail: "Per-user OAuth \u00b7 10+ integrations \u00b7 self-serve connect",
+      "Each team member connects their own Gmail, GitHub, Notion, Calendar, and Slack via OAuth. The agent acts with their permissions \u2014 not a shared bot account. When Sarah asks \u201ccheck my PRs,\u201d it checks Sarah\u2019s PRs. When Marcus asks, it checks his. No credential sharing. No security nightmares.",
+    detail: "Per-user OAuth \u00b7 10+ integrations \u00b7 self-serve setup",
   },
   {
     number: "03",
-    title: "Full Observability",
+    title: "Know exactly where every dollar goes.",
     description:
-      "Every token, every trace, every dollar. Langfuse captures the complete picture \u2014 latency, cost, model usage, conversation quality, and LLM-as-judge evaluations. Know exactly what your agents are doing.",
-    detail: "Langfuse traces \u00b7 LLM-as-judge \u00b7 real-time dashboard",
+      "You\u2019ll never wonder \u201cwhat are we paying for?\u201d again. Langfuse traces every request end-to-end \u2014 which model handled it, how long it took, what it cost, and whether the answer was actually good (we run LLM-as-judge evaluations automatically). Full audit trail. Full cost transparency. Full control.",
+    detail: "Langfuse traces \u00b7 LLM-as-judge scoring \u00b7 real-time dashboard",
   },
 ];
 
@@ -37,15 +45,14 @@ export function Features() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-16"
         >
-          <span className="label-mono">Capabilities</span>
-          <h2 className="heading-section mt-4">
-            Built for teams that<br />
-            <span className="italic">ship fast</span>
+          <span className="label-mono">Why teams switch</span>
+          <h2 className="heading-section mt-4 max-w-lg">
+            Three reasons you\u2019ll wonder<br />
+            <span className="italic">why you waited</span>
             <span className="text-[var(--accent)]">.</span>
           </h2>
         </motion.div>
 
-        {/* Feature grid: first card full width, then 2 columns */}
         <div className="grid gap-6 lg:grid-cols-2">
           {features.map((feature, i) => (
             <motion.div
@@ -57,20 +64,15 @@ export function Features() {
               className={`feature-card ${i === 0 ? "lg:col-span-2" : ""}`}
             >
               <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
-                {/* Large number */}
                 <div className="feature-number shrink-0">{feature.number}</div>
-
                 <div className="flex-1">
                   <h3 className="mb-3 text-xl font-semibold text-[var(--text)]">
                     {feature.title}
                   </h3>
-                  <p className="mb-4 text-[15px] leading-relaxed text-[var(--text-secondary)]">
+                  <p className="mb-4 text-[15px] leading-[1.75] text-[var(--text-secondary)]">
                     {feature.description}
                   </p>
-                  <span
-                    className="text-[11px] tracking-wider text-[var(--text-tertiary)]"
-                    style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.08em" }}
-                  >
+                  <span className="text-[11px] tracking-wider text-[var(--text-tertiary)]" style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.08em" }}>
                     {feature.detail}
                   </span>
                 </div>
@@ -79,29 +81,29 @@ export function Features() {
           ))}
         </div>
 
-        {/* Additional capabilities row */}
+        {/* Supporting features — keep concise, benefit-first */}
         <div className="mt-6 grid gap-6 sm:grid-cols-3">
           {[
             {
               icon: (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
               ),
-              title: "Multi-Channel",
-              desc: "Telegram, Slack, and web \u2014 agents meet users where they are.",
+              title: "Meet people where they are",
+              desc: "Telegram, Slack, or web \u2014 your agents show up in the channels your team already lives in. Zero app switching.",
             },
             {
               icon: (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
               ),
-              title: "Isolated & Secure",
-              desc: "Each agent runs in its own Docker container with dedicated resources.",
+              title: "Your data stays yours",
+              desc: "Every agent runs in its own isolated Docker container. Credentials never leave the sandbox. We can\u2019t see your data even if we wanted to.",
             },
             {
               icon: (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.58-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
               ),
-              title: "Custom Personas",
-              desc: "Give each agent a unique personality, knowledge base, and tool set.",
+              title: "Your agent, your rules",
+              desc: "Give each one a name, personality, knowledge base, and tool set. A PM bot that runs standup. A DevOps agent that watches deploys. A VA that handles your inbox.",
             },
           ].map((item, i) => (
             <motion.div

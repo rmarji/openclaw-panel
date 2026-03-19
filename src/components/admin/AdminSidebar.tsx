@@ -91,7 +91,7 @@ export function AdminSidebar() {
           className="text-xs text-white/20 hover:text-white/50 transition-colors duration-200"
           onClick={(e) => {
             e.preventDefault();
-            fetch("/api/admin/logout", { method: "POST" }).then(() => window.location.href = "/admin/login");
+            fetch("/api/admin/logout", { method: "POST" }).then(() => window.location.href = "/login");
           }}
         >
           Sign out
