@@ -13,6 +13,9 @@ interface Scenario {
   id: string;
   label: string;
   botName: string;
+  headline: string;
+  subhead: string;
+  stats: { stat: string; desc: string }[];
   messages: Message[];
 }
 
@@ -21,6 +24,14 @@ const scenarios: Scenario[] = [
     id: "leads",
     label: "Lead follow-up",
     botName: "Closer",
+    headline: "Your agent closes deals\nwhile you sleep.",
+    subhead:
+      "Leads go cold while you're stuck in admin work. Your agent follows up, qualifies, and books calls - all from one message.",
+    stats: [
+      { stat: "2x faster", desc: "lead response time" },
+      { stat: "3 deals", desc: "sourced from auto follow-ups last month" },
+      { stat: "$0 dropped", desc: "revenue from missed follow-ups" },
+    ],
     messages: [
       { type: "user", content: "Any new leads from the website today?", delay: 0 },
       { type: "system", content: "Checking Gmail + CRM...", delay: 800 },
@@ -40,46 +51,62 @@ const scenarios: Scenario[] = [
     ],
   },
   {
-    id: "scheduling",
-    label: "Client meetings",
-    botName: "Rayo",
+    id: "autopilot",
+    label: "Autopilot cron",
+    botName: "Watchdog",
+    headline: "It works even when\nyou don't ask.",
+    subhead:
+      "Set it and forget it. Your agent runs on a schedule - checking revenue, flagging issues, and sending you a morning briefing before you even open your laptop.",
+    stats: [
+      { stat: "Every 6 hrs", desc: "revenue + churn checks, automatically" },
+      { stat: "8:00 AM", desc: "daily briefing in your Telegram, no prompt needed" },
+      { stat: "Instant", desc: "alerts when something needs your attention" },
+    ],
     messages: [
-      { type: "user", content: "What's on my plate today?", delay: 0 },
-      { type: "system", content: "Pulling from Google Calendar...", delay: 800 },
       {
-        type: "agent",
-        content:
-          "3 meetings today:\n* 10:00 AM - Discovery call with Bloom Co ($15K deal)\n* 2:00 PM - Proposal review with your team\n* 4:00 PM - 1:1 with Marcus\n\nHeads up: Bloom Co opened your proposal email 6 times since yesterday. They're ready.",
-        delay: 1800,
+        type: "system",
+        content: "Scheduled check (every 6 hrs)...",
+        delay: 0,
       },
-      { type: "user", content: "Cancel the 4pm and prep me for the Bloom call", delay: 3600 },
-      { type: "system", content: "Updating calendar, pulling deal notes...", delay: 4200 },
       {
         type: "agent",
-        content: "Done - Marcus is notified. Here's your Bloom Co brief:\n\n* Budget: $15K/yr, approved by their CFO\n* Pain point: spending 20 hrs/week on manual client reporting\n* Decision maker: Lisa Chen, COO\n* Competitor: they demoed Zapier last week but found it \"too technical\"\n\nLead with the done-for-you angle. They want easy, not DIY.",
-        delay: 5400,
+        content: "Morning briefing - March 24:\n\n* MRR: $11,800 (+$790 from yesterday)\n* 1 new signup overnight: Prism Agency, Pro plan ($79/mo)\n* 0 churns\n* Overdue invoice from Acme ($790) - reminder sent yesterday, no response yet\n\nOne flag: trial user BrightPath hit their message limit 3x this week. High intent - want me to send them an upgrade nudge?",
+        delay: 1200,
+      },
+      { type: "user", content: "Yes, send the upgrade nudge. And follow up on Acme with a phone-friendly reminder", delay: 3200 },
+      { type: "system", content: "Drafting emails...", delay: 3800 },
+      {
+        type: "agent",
+        content: "Done. BrightPath got a personalized upgrade email showing their usage vs. the Pro plan limit. Acme got a short, friendly nudge with a direct payment link.\n\nI'll check again at 2 PM and ping you if either responds.",
+        delay: 5000,
       },
     ],
   },
   {
-    id: "invoices",
-    label: "Revenue tracking",
-    botName: "Atlas",
+    id: "advisory",
+    label: "Advisory board",
+    botName: "Board",
+    headline: "A board of advisors\nin your pocket.",
+    subhead:
+      "Preinstalled skills turn your agent into a team of mentors - a CFO reviewing your pricing, a CMO critiquing your funnel, a sales coach sharpening your pitch. Expert-level feedback on demand.",
+    stats: [
+      { stat: "6 advisors", desc: "preinstalled: CFO, CMO, CTO, COO, sales coach, growth mentor" },
+      { stat: "On demand", desc: "ask for a board review anytime" },
+      { stat: "$0/hr", desc: "vs. $500/hr for a real advisory board" },
+    ],
     messages: [
-      { type: "user", content: "How did we do this month?", delay: 0 },
-      { type: "system", content: "Pulling from Stripe + Gmail...", delay: 800 },
+      { type: "user", content: "Run a board review on our Q1 numbers and pricing strategy", delay: 0 },
+      { type: "system", content: "Activating advisory skills...", delay: 800 },
       {
         type: "agent",
-        content:
-          "March numbers so far:\n\n* Revenue: $14,200 (up 23% from Feb)\n* New customers: 8\n* Churned: 1 (downgraded, not lost)\n* MRR: $11,800\n\n2 invoices are overdue - $790 from Acme (5 days late) and $199 from BrightPath (2 days). Want me to send friendly reminders?",
-        delay: 2400,
+        content: "Board review complete. Here's the summary:\n\nCFO: Your margins are healthy at 72%, but the Starter tier at $29/mo is underwater after support costs. Consider raising to $39 or removing live support from that tier.\n\nCMO: Your best conversion page is the case study, not the homepage. Move social proof above the fold.\n\nSales Coach: You're leaving money on the table - 40% of Pro users hit their limits monthly. That's an upsell trigger you're ignoring.",
+        delay: 3000,
       },
-      { type: "user", content: "Yes, send reminders to both. Personalize them.", delay: 4200 },
-      { type: "system", content: "Drafting payment reminders...", delay: 4800 },
+      { type: "user", content: "What does the growth mentor think about our trial-to-paid conversion?", delay: 5200 },
       {
         type: "agent",
-        content: "Sent. Acme got a note mentioning their upcoming renewal discount. BrightPath got a softer nudge since they're only 2 days out.\n\nAlso noticed: 3 trials are expiring this week. Want me to send them a \"last chance\" offer with 20% off the first 3 months?",
-        delay: 6000,
+        content: "Growth Mentor: Your trial-to-paid is 12%, which is below the 15-20% SaaS benchmark. Two issues:\n\n1. No onboarding email sequence - users sign up and hear nothing for 7 days\n2. Your trial doesn't expire - there's no urgency to convert\n\nQuick win: add a 3-email drip (day 1, day 3, day 6) and set trials to 14 days with a countdown. Companies like Basecamp saw 25% conversion lifts from expiring trials alone.",
+        delay: 6800,
       },
     ],
   },
@@ -87,6 +114,14 @@ const scenarios: Scenario[] = [
     id: "social",
     label: "Content + outreach",
     botName: "Ghost",
+    headline: "Turn your wins into\ninbound leads.",
+    subhead:
+      "Your agent knows what content drives revenue - not just engagement. It drafts posts, schedules them at peak times, and turns every client win into a lead magnet.",
+    stats: [
+      { stat: "3 leads", desc: "from last case study thread" },
+      { stat: "Tuesday 9am", desc: "your highest engagement window" },
+      { stat: "10 min", desc: "from idea to scheduled post" },
+    ],
     messages: [
       { type: "user", content: "What content should I post this week?", delay: 0 },
       { type: "system", content: "Analyzing your top posts + industry trends...", delay: 800 },
@@ -125,7 +160,7 @@ export function LiveDemo() {
   const [showTyping, setShowTyping] = useState(false);
   const [hasPlayed, setHasPlayed] = useState<Set<number>>(new Set([0]));
 
-  const currentScenario = scenarios[activeScenario];
+  const current = scenarios[activeScenario];
 
   useEffect(() => {
     if (!isInView && !hasPlayed.has(activeScenario)) return;
@@ -136,7 +171,7 @@ export function LiveDemo() {
 
     const timeouts: ReturnType<typeof setTimeout>[] = [];
 
-    currentScenario.messages.forEach((msg, i) => {
+    current.messages.forEach((msg, i) => {
       if (msg.type === "agent") {
         timeouts.push(setTimeout(() => setShowTyping(true), msg.delay - 600));
       }
@@ -162,40 +197,48 @@ export function LiveDemo() {
 
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* Left copy */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
+          {/* Left copy - adapts per tab */}
+          <div>
             <span className="label-mono">See it work</span>
-            <h2 className="heading-section mt-4">
-              Your agent closes deals<br />
-              <span className="italic">while you sleep</span>
-              <span className="text-[var(--accent)]">.</span>
-            </h2>
-            <p className="body-large mt-6 max-w-md">
-              Leads go cold while you're stuck in admin work.
-              Your agent follows up, books calls, sends invoices, and drafts content
-              - all from <span className="text-[var(--text)]">one message</span>.
-            </p>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeScenario}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <h2 className="heading-section mt-4 whitespace-pre-line">
+                  {current.headline.split("\n").map((line, i) => (
+                    <span key={i}>
+                      {i === 1 ? <span className="italic">{line}</span> : line}
+                      {i === 0 && <br />}
+                    </span>
+                  ))}
+                  <span className="text-[var(--accent)]">.</span>
+                </h2>
+                <p className="body-large mt-6 max-w-md">
+                  {current.subhead}
+                </p>
 
-            <div className="mt-8 flex flex-col gap-4">
-              {[
-                { stat: "6.2 hrs/week", desc: "freed up for revenue work" },
-                { stat: "2x faster", desc: "lead response time" },
-                { stat: "$0 dropped", desc: "revenue from missed follow-ups" },
-              ].map((item) => (
-                <div key={item.stat} className="flex items-baseline gap-3">
-                  <span className="shrink-0 text-[15px] font-semibold text-[var(--accent)]" style={{ fontFamily: "var(--font-mono)" }}>
-                    {item.stat}
-                  </span>
-                  <span className="text-[14px] text-[var(--text-secondary)]">{item.desc}</span>
+                <div className="mt-8 flex flex-col gap-4">
+                  {current.stats.map((item) => (
+                    <div key={item.stat} className="flex items-baseline gap-3">
+                      <span
+                        className="shrink-0 text-[15px] font-semibold text-[var(--accent)]"
+                        style={{ fontFamily: "var(--font-mono)" }}
+                      >
+                        {item.stat}
+                      </span>
+                      <span className="text-[14px] text-[var(--text-secondary)]">
+                        {item.desc}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </motion.div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
           {/* Right: Chat window with tabs */}
           <motion.div
@@ -230,8 +273,11 @@ export function LiveDemo() {
                   <div className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
                   <div className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
                 </div>
-                <span className="ml-2 text-[11px] text-[var(--text-tertiary)]" style={{ fontFamily: "var(--font-mono)" }}>
-                  {currentScenario.botName} &middot; Telegram
+                <span
+                  className="ml-2 text-[11px] text-[var(--text-tertiary)]"
+                  style={{ fontFamily: "var(--font-mono)" }}
+                >
+                  {current.botName} &middot; Telegram
                 </span>
               </div>
 
@@ -245,7 +291,7 @@ export function LiveDemo() {
                     transition={{ duration: 0.2 }}
                     className="flex flex-col gap-3"
                   >
-                    {currentScenario.messages.map((msg, i) => {
+                    {current.messages.map((msg, i) => {
                       const visible = visibleMessages.includes(i);
                       if (!visible) return null;
 
@@ -258,8 +304,20 @@ export function LiveDemo() {
                             transition={{ duration: 0.3 }}
                             className="msg-system justify-center"
                           >
-                            <svg className="h-3 w-3 animate-spin text-[var(--accent)]" viewBox="0 0 24 24" fill="none">
-                              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" strokeDasharray="31.4 31.4" strokeLinecap="round" />
+                            <svg
+                              className="h-3 w-3 animate-spin text-[var(--accent)]"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeDasharray="31.4 31.4"
+                                strokeLinecap="round"
+                              />
                             </svg>
                             <span>{msg.content}</span>
                           </motion.div>
@@ -271,8 +329,13 @@ export function LiveDemo() {
                           key={i}
                           initial={{ opacity: 0, y: 8, scale: 0.97 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
-                          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                          className={msg.type === "user" ? "msg-user" : "msg-agent"}
+                          transition={{
+                            duration: 0.35,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className={
+                            msg.type === "user" ? "msg-user" : "msg-agent"
+                          }
                         >
                           <p className="whitespace-pre-line text-[13px] leading-relaxed text-[var(--text)]">
                             {msg.content}
@@ -282,7 +345,11 @@ export function LiveDemo() {
                     })}
 
                     {showTyping && (
-                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="msg-agent w-fit">
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="msg-agent w-fit"
+                      >
                         <TypingIndicator />
                       </motion.div>
                     )}
