@@ -22,7 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ClawGeeks — AI Agents That Work For You",
+  title: "ClawGeeks - AI Agents That Work For You",
   description:
     "Deploy personal AI agents with Telegram, Slack, Gmail, GitHub and more. Smart model routing, tool integrations, and 24/7 availability.",
 };

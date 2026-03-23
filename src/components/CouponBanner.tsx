@@ -31,7 +31,7 @@ export function CouponBanner() {
               {featured.description}
             </span>
             <span className="hidden text-white/70 sm:inline">
-              — auto-applied at checkout
+              - auto-applied at checkout
             </span>
           </span>
           <button

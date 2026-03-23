@@ -17,7 +17,7 @@ const agents = [
   { name: "Rayo", activity: "Reviewing 3 pull requests", service: "GitHub", time: "2m ago", color: "#34d399" },
   { name: "Eddie", activity: "Drafting Q1 budget summary", service: "Notion", time: "Just now", color: "#34d399" },
   { name: "Alana", activity: "Responding in #general", service: "Slack", time: "5m ago", color: "#34d399" },
-  { name: "Lina", activity: "Scheduled \u00b7 starts at 9am", service: "Telegram", time: "Paused", color: "#6b7280" },
+  { name: "Lina", activity: "Scheduled / starts at 9am", service: "Telegram", time: "Paused", color: "#6b7280" },
 ];
 
 const activities = [
@@ -106,7 +106,7 @@ export function Hero() {
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
             </span>
             <span className="text-[12px] font-medium text-[var(--text-secondary)]" style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.04em" }}>
-              Founding member pricing — limited spots
+              Founding member pricing - limited spots
             </span>
           </span>
         </motion.div>

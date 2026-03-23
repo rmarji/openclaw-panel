@@ -6,7 +6,7 @@ const steps = [
   {
     number: "1",
     title: "Pick your agent",
-    description: "Choose a plan, name your agent, and give it a personality. PM bot, DevOps assistant, personal VA \u2014 you decide.",
+    description: "Choose a plan, name your agent, and give it a personality. PM bot, DevOps assistant, personal VA  - you decide.",
     icon: (
       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
     ),
@@ -14,7 +14,7 @@ const steps = [
   {
     number: "2",
     title: "Connect your tools",
-    description: "One-click OAuth for Gmail, Slack, GitHub, Calendar, Notion. Your credentials, your agent \u2014 no shared accounts.",
+    description: "One-click OAuth for Gmail, Slack, GitHub, Calendar, Notion. Your credentials, your agent  - no shared accounts.",
     icon: (
       <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
     ),

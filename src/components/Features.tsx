@@ -15,22 +15,22 @@ const features = [
     number: "01",
     title: "Your costs drop 60%. Automatically.",
     description:
-      "Most AI platforms charge you premium rates for every single query \u2014 even \u201cwhat time is it in Tokyo.\u201d Our Manifest engine scores each message across 23 dimensions in under 2 milliseconds and routes it to the cheapest model that can handle it. Complex reasoning gets Claude Opus. Simple lookups get Haiku. You get the same quality at a fraction of the price.",
-    detail: "23 dimensions \u00b7 4 model tiers \u00b7 <2ms per decision",
+      "Most AI platforms charge you premium rates for every single query  - even "what time is it in Tokyo." Our Manifest engine scores each message across 23 dimensions in under 2 milliseconds and routes it to the cheapest model that can handle it. Complex reasoning gets Claude Opus. Simple lookups get Haiku. You get the same quality at a fraction of the price.",
+    detail: "23 dimensions / 4 model tiers / <2ms per decision",
   },
   {
     number: "02",
     title: "Their tools. Their credentials. Your agent.",
     description:
-      "Each team member connects their own Gmail, GitHub, Notion, Calendar, and Slack via OAuth. The agent acts with their permissions \u2014 not a shared bot account. When Sarah asks \u201ccheck my PRs,\u201d it checks Sarah\u2019s PRs. When Marcus asks, it checks his. No credential sharing. No security nightmares.",
-    detail: "Per-user OAuth \u00b7 10+ integrations \u00b7 self-serve setup",
+      "Each team member connects their own Gmail, GitHub, Notion, Calendar, and Slack via OAuth. The agent acts with their permissions  - not a shared bot account. When Sarah asks "check my PRs," it checks Sarah's PRs. When Marcus asks, it checks his. No credential sharing. No security nightmares.",
+    detail: "Per-user OAuth / 10+ integrations / self-serve setup",
   },
   {
     number: "03",
     title: "Know exactly where every dollar goes.",
     description:
-      "You\u2019ll never wonder \u201cwhat are we paying for?\u201d again. Langfuse traces every request end-to-end \u2014 which model handled it, how long it took, what it cost, and whether the answer was actually good (we run LLM-as-judge evaluations automatically). Full audit trail. Full cost transparency. Full control.",
-    detail: "Langfuse traces \u00b7 LLM-as-judge scoring \u00b7 real-time dashboard",
+      "You'll never wonder "what are we paying for?" again. Langfuse traces every request end-to-end  - which model handled it, how long it took, what it cost, and whether the answer was actually good (we run LLM-as-judge evaluations automatically). Full audit trail. Full cost transparency. Full control.",
+    detail: "Langfuse traces / LLM-as-judge scoring / real-time dashboard",
   },
 ];
 
@@ -47,7 +47,7 @@ export function Features() {
         >
           <span className="label-mono">Why teams switch</span>
           <h2 className="heading-section mt-4 max-w-lg">
-            Three reasons you\u2019ll wonder<br />
+            Three reasons you'll wonder<br />
             <span className="italic">why you waited</span>
             <span className="text-[var(--accent)]">.</span>
           </h2>
@@ -89,14 +89,14 @@ export function Features() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
               ),
               title: "Meet people where they are",
-              desc: "Telegram, Slack, or web \u2014 your agents show up in the channels your team already lives in. Zero app switching.",
+              desc: "Telegram, Slack, or web  - your agents show up in the channels your team already lives in. Zero app switching.",
             },
             {
               icon: (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
               ),
               title: "Your data stays yours",
-              desc: "Every agent runs in its own isolated Docker container. Credentials never leave the sandbox. We can\u2019t see your data even if we wanted to.",
+              desc: "Every agent runs in its own isolated Docker container. Credentials never leave the sandbox. We can't see your data even if we wanted to.",
             },
             {
               icon: (
