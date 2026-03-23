@@ -18,90 +18,90 @@ interface Scenario {
 
 const scenarios: Scenario[] = [
   {
-    id: "calendar",
-    label: "Calendar",
-    botName: "Rayo",
+    id: "leads",
+    label: "Lead follow-up",
+    botName: "Closer",
     messages: [
-      { type: "user", content: "What meetings do I have today?", delay: 0 },
-      { type: "system", content: "Pulling from Google Calendar...", delay: 800 },
+      { type: "user", content: "Any new leads from the website today?", delay: 0 },
+      { type: "system", content: "Checking Gmail + CRM...", delay: 800 },
       {
         type: "agent",
         content:
-          "You have 3 meetings today:\n* 10:00 AM - Daily standup (15 min)\n* 2:00 PM - Design review with Sarah (1 hr)\n* 4:00 PM - 1:1 with Marcus (30 min)",
-        delay: 1800,
-      },
-      { type: "user", content: "Cancel the 4pm, something came up", delay: 3600 },
-      { type: "system", content: "Updating Google Calendar...", delay: 4200 },
-      {
-        type: "agent",
-        content: "Done! Cancelled your 1:1 with Marcus and sent him a heads up so he's not left wondering.",
-        delay: 5200,
-      },
-    ],
-  },
-  {
-    id: "devops",
-    label: "DevOps",
-    botName: "Sentinel",
-    messages: [
-      { type: "user", content: "How's the production deploy looking?", delay: 0 },
-      { type: "system", content: "Checking GitHub Actions + server metrics...", delay: 800 },
-      {
-        type: "agent",
-        content:
-          "Deploy #247 rolled out 12 min ago. All 3 servers healthy:\n* CPU: 23% avg across cluster\n* Memory: 4.2 GB / 32 GB on claws\n* 0 errors in the last 10 min\nOne thing: response latency on /api/checkout spiked to 820ms (normally 200ms). Want me to pull the logs?",
+          "3 new inbound leads today:\n\n1. Jake from FlowStack - downloaded the pricing PDF, visited 4 pages\n2. Sarah at Onyx Media - filled out the demo form 2 hrs ago\n3. Mike R. - replied to your cold email from last week, says \"interested, send me more info\"\n\nSarah is the hottest - demo form + she's VP of Ops at a 40-person agency. Want me to send her a calendar link?",
         delay: 2200,
       },
-      { type: "user", content: "Yeah, pull the slow request logs", delay: 4000 },
-      { type: "system", content: "Querying Langfuse traces...", delay: 4600 },
+      { type: "user", content: "Yes, send Sarah my calendar link and draft a personal reply to Mike", delay: 4000 },
+      { type: "system", content: "Sending emails...", delay: 4600 },
       {
         type: "agent",
-        content: "Found it. The Stripe API is taking 600ms+ on subscription.retrieve calls. Looks like Stripe is having intermittent latency on their end - their status page confirms degraded performance. Not on our side. I'll keep monitoring and ping you if it gets worse.",
+        content: "Done. Sarah got your Calendly link with a personal note referencing agencies like hers. Mike got a reply highlighting the 3 features most relevant to his industry.\n\nBoth emails sent from your Gmail - looks like you wrote them yourself.",
         delay: 5800,
       },
     ],
   },
   {
-    id: "email",
-    label: "Email triage",
-    botName: "Atlas",
+    id: "scheduling",
+    label: "Client meetings",
+    botName: "Rayo",
     messages: [
-      { type: "user", content: "Anything urgent in my inbox from today?", delay: 0 },
-      { type: "system", content: "Scanning Gmail...", delay: 800 },
+      { type: "user", content: "What's on my plate today?", delay: 0 },
+      { type: "system", content: "Pulling from Google Calendar...", delay: 800 },
       {
         type: "agent",
         content:
-          "14 new emails today. 2 need your attention:\n\n1. From legal@acme.co - NDA review, they need a signature by EOD Friday\n2. From marcus@team.io - client demo moved to tomorrow 9am, needs your deck\n\nThe rest: 6 newsletters, 3 automated alerts (all green), 2 cold outreach, 1 receipt.",
-        delay: 2400,
+          "3 meetings today:\n* 10:00 AM - Discovery call with Bloom Co ($15K deal)\n* 2:00 PM - Proposal review with your team\n* 4:00 PM - 1:1 with Marcus\n\nHeads up: Bloom Co opened your proposal email 6 times since yesterday. They're ready.",
+        delay: 1800,
       },
-      { type: "user", content: "Draft a reply to Marcus, tell him I'll have the deck ready by 8am", delay: 4200 },
-      { type: "system", content: "Drafting reply in Gmail...", delay: 4800 },
+      { type: "user", content: "Cancel the 4pm and prep me for the Bloom call", delay: 3600 },
+      { type: "system", content: "Updating calendar, pulling deal notes...", delay: 4200 },
       {
         type: "agent",
-        content: "Draft saved. Here's what I wrote:\n\n\"Hey Marcus, got it - I'll have the updated deck in your inbox by 8am sharp. Anything specific you want me to add before the demo?\"\n\nSend it, or want me to change anything?",
+        content: "Done - Marcus is notified. Here's your Bloom Co brief:\n\n* Budget: $15K/yr, approved by their CFO\n* Pain point: spending 20 hrs/week on manual client reporting\n* Decision maker: Lisa Chen, COO\n* Competitor: they demoed Zapier last week but found it \"too technical\"\n\nLead with the done-for-you angle. They want easy, not DIY.",
+        delay: 5400,
+      },
+    ],
+  },
+  {
+    id: "invoices",
+    label: "Revenue tracking",
+    botName: "Atlas",
+    messages: [
+      { type: "user", content: "How did we do this month?", delay: 0 },
+      { type: "system", content: "Pulling from Stripe + Gmail...", delay: 800 },
+      {
+        type: "agent",
+        content:
+          "March numbers so far:\n\n* Revenue: $14,200 (up 23% from Feb)\n* New customers: 8\n* Churned: 1 (downgraded, not lost)\n* MRR: $11,800\n\n2 invoices are overdue - $790 from Acme (5 days late) and $199 from BrightPath (2 days). Want me to send friendly reminders?",
+        delay: 2400,
+      },
+      { type: "user", content: "Yes, send reminders to both. Personalize them.", delay: 4200 },
+      { type: "system", content: "Drafting payment reminders...", delay: 4800 },
+      {
+        type: "agent",
+        content: "Sent. Acme got a note mentioning their upcoming renewal discount. BrightPath got a softer nudge since they're only 2 days out.\n\nAlso noticed: 3 trials are expiring this week. Want me to send them a \"last chance\" offer with 20% off the first 3 months?",
         delay: 6000,
       },
     ],
   },
   {
-    id: "github",
-    label: "Code review",
-    botName: "Rayo",
+    id: "social",
+    label: "Content + outreach",
+    botName: "Ghost",
     messages: [
-      { type: "user", content: "What PRs are waiting on me?", delay: 0 },
-      { type: "system", content: "Checking GitHub...", delay: 800 },
+      { type: "user", content: "What content should I post this week?", delay: 0 },
+      { type: "system", content: "Analyzing your top posts + industry trends...", delay: 800 },
       {
         type: "agent",
         content:
-          "3 PRs need your review:\n\n1. #412 \"Add rate limiting to API\" by Sarah - 2 files, opened 3h ago\n2. #409 \"Fix webhook retry logic\" by Marcus - 1 file, opened yesterday\n3. #401 \"Migrate auth to Clerk\" by bot - 13 files, opened 2 days ago\n\n#409 is the smallest, want to start there?",
-        delay: 2000,
+          "Based on what performed best for you:\n\n1. Case study thread - your client Bloom Co saved 20 hrs/week (your audience loves specifics)\n2. Hot take on the new AI pricing from OpenAI (trending topic, high engagement window)\n3. Behind-the-scenes of how you closed a $15K deal in one call\n\n#1 has the highest revenue potential - last time you posted a case study, you got 3 inbound leads.",
+        delay: 2400,
       },
-      { type: "user", content: "Summarize the changes in #412", delay: 3800 },
-      { type: "system", content: "Reading PR diff...", delay: 4400 },
+      { type: "user", content: "Draft the case study thread for me", delay: 4200 },
+      { type: "system", content: "Writing thread draft...", delay: 4800 },
       {
         type: "agent",
-        content: "Sarah added express-rate-limit middleware to /api/checkout and /api/webhooks. 50 requests per 15 min window per IP, with a custom handler that returns 429 + retry-after header. Tests included. Clean implementation - no concerns from me. Want me to approve it?",
-        delay: 5800,
+        content: "Here's a 5-post thread:\n\n1/ \"Our client was spending 20 hrs/week on manual reports. Now they spend zero. Here's what we did:\"\n2/ The problem + old workflow\n3/ What we built + the 'aha' moment\n4/ Results with real numbers\n5/ CTA to book a call\n\nFull draft is in your Notion. Want me to schedule it for Tuesday 9am? That's your highest engagement window.",
+        delay: 6200,
       },
     ],
   },
@@ -171,21 +171,21 @@ export function LiveDemo() {
           >
             <span className="label-mono">See it work</span>
             <h2 className="heading-section mt-4">
-              Your agent handles<br />
-              <span className="italic">the chaos</span>
+              Your agent closes deals<br />
+              <span className="italic">while you sleep</span>
               <span className="text-[var(--accent)]">.</span>
             </h2>
             <p className="body-large mt-6 max-w-md">
-              Right now, you're toggling between 7 tabs to reschedule one meeting,
-              triage your inbox, or check a deploy.
-              Your agent does it in <span className="text-[var(--text)]">one message</span>.
+              Leads go cold while you're stuck in admin work.
+              Your agent follows up, books calls, sends invoices, and drafts content
+              - all from <span className="text-[var(--text)]">one message</span>.
             </p>
 
             <div className="mt-8 flex flex-col gap-4">
               {[
-                { stat: "6.2 hrs/week", desc: "saved per user on average" },
-                { stat: "< 3 seconds", desc: "to check, act, and confirm" },
-                { stat: "Zero", desc: "dropped balls - it never forgets a follow-up" },
+                { stat: "6.2 hrs/week", desc: "freed up for revenue work" },
+                { stat: "2x faster", desc: "lead response time" },
+                { stat: "$0 dropped", desc: "revenue from missed follow-ups" },
               ].map((item) => (
                 <div key={item.stat} className="flex items-baseline gap-3">
                   <span className="shrink-0 text-[15px] font-semibold text-[var(--accent)]" style={{ fontFamily: "var(--font-mono)" }}>
