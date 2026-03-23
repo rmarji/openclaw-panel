@@ -92,7 +92,7 @@ export const activeCoupons: Coupon[] = [
     percentOff: 25,
     duration: "repeating",
     durationInMonths: 3,
-    stripeCouponId: "LAUNCH25",
+    stripeCouponId: "heqsACj4",
   },
   {
     code: "ANNUAL20",
@@ -100,6 +100,6 @@ export const activeCoupons: Coupon[] = [
     percentOff: 20,
     duration: "once",
     applicableTiers: ["pro", "team"],
-    stripeCouponId: "ANNUAL20",
+    stripeCouponId: "wU1v6wZA",
   },
 ];

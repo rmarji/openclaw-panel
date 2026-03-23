@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { tiers } from "@/lib/pricing";
+import { tiers, activeCoupons } from "@/lib/pricing";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
@@ -32,7 +32,11 @@ export async function POST(req: NextRequest) {
     };
 
     if (couponCode) {
-      params.discounts = [{ coupon: couponCode }];
+      // Map user-facing code (e.g. "LAUNCH25") to Stripe coupon ID
+      const coupon = activeCoupons.find(
+        (c) => c.code.toUpperCase() === couponCode.toUpperCase()
+      );
+      params.discounts = [{ coupon: coupon?.stripeCouponId || couponCode }];
     }
 
     const session = await stripe.checkout.sessions.create(params);
