@@ -26,8 +26,8 @@ export const tiers: PricingTier[] = [
       "Email support",
     ],
     cta: "Try it free",
-    priceIdMonthly: process.env.STRIPE_PRICE_STARTER_MONTHLY!,
-    priceIdYearly: process.env.STRIPE_PRICE_STARTER_YEARLY!,
+    priceIdMonthly: "price_1TEHJyDDXKnpObNkVrC5curH",
+    priceIdYearly: "price_1TEHJyDDXKnpObNk4Xt8Wnfj",
   },
   {
     name: "Pro",
@@ -46,8 +46,8 @@ export const tiers: PricingTier[] = [
       "Priority support",
     ],
     cta: "Start free trial",
-    priceIdMonthly: process.env.STRIPE_PRICE_PRO_MONTHLY!,
-    priceIdYearly: process.env.STRIPE_PRICE_PRO_YEARLY!,
+    priceIdMonthly: "price_1TEHJzDDXKnpObNkh9bbllcn",
+    priceIdYearly: "price_1TEHJzDDXKnpObNkAEKKnJaT",
   },
   {
     name: "Team",
@@ -66,8 +66,8 @@ export const tiers: PricingTier[] = [
       "Slack support channel",
     ],
     cta: "Talk to us",
-    priceIdMonthly: process.env.STRIPE_PRICE_TEAM_MONTHLY!,
-    priceIdYearly: process.env.STRIPE_PRICE_TEAM_YEARLY!,
+    priceIdMonthly: "price_1TEHK0DDXKnpObNkuHmTEXKK",
+    priceIdYearly: "price_1TEHK0DDXKnpObNkhq4WEQbp",
   },
 ];
 
