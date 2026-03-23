@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { PricingTier } from "@/lib/pricing";
-import { CouponInput } from "./CouponInput";
+import { activeCoupons } from "@/lib/pricing";
 
 interface PricingCardProps {
   tier: PricingTier;
@@ -12,30 +12,12 @@ interface PricingCardProps {
 }
 
 export function PricingCard({ tier, billingPeriod, index }: PricingCardProps) {
-  const [appliedCoupon, setAppliedCoupon] = useState<{
-    code: string;
-    percentOff?: number;
-    amountOff?: number;
-  } | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [hovered, setHovered] = useState(false);
 
-  const basePrice = billingPeriod === "monthly" ? tier.monthlyPrice : tier.yearlyPrice;
   const perMonth = billingPeriod === "yearly" ? Math.round(tier.yearlyPrice / 12) : tier.monthlyPrice;
-
-  let discountedPerMonth = perMonth;
-  if (appliedCoupon?.percentOff) {
-    discountedPerMonth = Math.round(perMonth * (1 - appliedCoupon.percentOff / 100));
-  } else if (appliedCoupon?.amountOff) {
-    discountedPerMonth = Math.max(0, perMonth - appliedCoupon.amountOff);
-  }
-
-  let discountedTotal = basePrice;
-  if (appliedCoupon?.percentOff) {
-    discountedTotal = Math.round(basePrice * (1 - appliedCoupon.percentOff / 100));
-  } else if (appliedCoupon?.amountOff) {
-    discountedTotal = Math.max(0, basePrice - appliedCoupon.amountOff);
-  }
+  const basePrice = billingPeriod === "monthly" ? tier.monthlyPrice : tier.yearlyPrice;
 
   const yearlySavings =
     billingPeriod === "yearly"
@@ -44,17 +26,24 @@ export function PricingCard({ tier, billingPeriod, index }: PricingCardProps) {
 
   async function handleCheckout() {
     setLoading(true);
+    setError(null);
     try {
       const priceId = billingPeriod === "monthly" ? tier.priceIdMonthly : tier.priceIdYearly;
+      // Auto-apply the featured coupon (banner promises "auto-applied at checkout")
+      const featuredCoupon = activeCoupons[0];
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId, couponCode: appliedCoupon?.code }),
+        body: JSON.stringify({ priceId, couponCode: featuredCoupon?.code }),
       });
       const data = await res.json();
-      if (data.url) window.location.href = data.url;
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError(data.error || "Something went wrong. Please try again.");
+      }
     } catch {
-      // handle error
+      setError("Connection failed. Please check your internet and try again.");
     } finally {
       setLoading(false);
     }
@@ -72,7 +61,6 @@ export function PricingCard({ tier, billingPeriod, index }: PricingCardProps) {
         tier.highlighted ? "gradient-border" : ""
       }`}
     >
-      {/* Card inner */}
       <div
         className={`relative flex h-full flex-col rounded-2xl p-8 ${
           tier.highlighted ? "glass-highlight glow-violet-strong" : "glass"
@@ -81,7 +69,7 @@ export function PricingCard({ tier, billingPeriod, index }: PricingCardProps) {
         {/* Popular badge */}
         {tier.highlighted && (
           <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-            <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-1 text-xs font-bold tracking-wider text-white uppercase shadow-lg shadow-violet-500/20">
+            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--accent)] px-4 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-[var(--accent-glow)]">
               <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
               </svg>
@@ -92,8 +80,8 @@ export function PricingCard({ tier, billingPeriod, index }: PricingCardProps) {
 
         {/* Tier name & description */}
         <div className="mb-6">
-          <h3 className="text-xl font-bold text-white">{tier.name}</h3>
-          <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">
+          <h3 className="text-xl font-bold text-[var(--text)]">{tier.name}</h3>
+          <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-tertiary)]">
             {tier.description}
           </p>
         </div>
@@ -101,56 +89,22 @@ export function PricingCard({ tier, billingPeriod, index }: PricingCardProps) {
         {/* Price */}
         <div className="mb-6">
           <div className="flex items-baseline gap-1.5">
-            {appliedCoupon ? (
-              <>
-                <span className="text-2xl font-medium text-zinc-600 line-through">
-                  ${perMonth}
-                </span>
-                <motion.span
-                  initial={{ scale: 1.1 }}
-                  animate={{ scale: 1 }}
-                  className="text-5xl font-bold tracking-tight text-white"
-                >
-                  ${discountedPerMonth}
-                </motion.span>
-              </>
-            ) : (
-              <span className="text-5xl font-bold tracking-tight text-white">
-                ${perMonth}
-              </span>
-            )}
-            <span className="text-base text-zinc-500">/mo</span>
+            <span className="text-5xl font-bold tracking-tight text-[var(--text)]">
+              ${perMonth}
+            </span>
+            <span className="text-base text-[var(--text-tertiary)]">/mo</span>
           </div>
 
           {billingPeriod === "yearly" && (
-            <p className="mt-1.5 text-sm text-zinc-500">
-              ${appliedCoupon ? discountedTotal : basePrice}/year
-              {yearlySavings > 0 && !appliedCoupon && (
+            <p className="mt-1.5 text-sm text-[var(--text-tertiary)]">
+              ${basePrice}/year
+              {yearlySavings > 0 && (
                 <span className="ml-1.5 font-medium text-emerald-400">
                   Save {yearlySavings}%
                 </span>
               )}
             </p>
           )}
-
-          {appliedCoupon && (
-            <motion.p
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-1.5 text-sm font-medium text-violet-400"
-            >
-              {appliedCoupon.percentOff}% discount applied
-            </motion.p>
-          )}
-        </div>
-
-        {/* Coupon */}
-        <div className="mb-6">
-          <CouponInput
-            tier={tier.slug}
-            onApply={(coupon) => setAppliedCoupon(coupon)}
-            onClear={() => setAppliedCoupon(null)}
-          />
         </div>
 
         {/* Features */}
@@ -162,10 +116,10 @@ export function PricingCard({ tier, billingPeriod, index }: PricingCardProps) {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 + i * 0.03 }}
               viewport={{ once: true }}
-              className="flex items-start gap-3 text-sm text-zinc-400"
+              className="flex items-start gap-3 text-sm text-[var(--text-secondary)]"
             >
               <svg
-                className="mt-0.5 h-4 w-4 shrink-0 text-violet-400"
+                className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={2.5}
@@ -178,14 +132,21 @@ export function PricingCard({ tier, billingPeriod, index }: PricingCardProps) {
           ))}
         </ul>
 
+        {/* Error message */}
+        {error && (
+          <p className="mb-3 rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">
+            {error}
+          </p>
+        )}
+
         {/* CTA */}
         <button
           onClick={handleCheckout}
           disabled={loading}
           className={`group relative w-full overflow-hidden rounded-xl py-3.5 text-sm font-semibold transition-all ${
             tier.highlighted
-              ? "bg-violet-600 text-white hover:bg-violet-500 hover:shadow-lg hover:shadow-violet-500/20"
-              : "bg-white/[0.06] text-white hover:bg-white/[0.1]"
+              ? "bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] hover:shadow-lg hover:shadow-[var(--accent-glow)]"
+              : "bg-white/[0.06] text-[var(--text)] hover:bg-white/[0.1]"
           } disabled:opacity-50`}
         >
           {loading ? (

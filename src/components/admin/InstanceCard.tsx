@@ -11,64 +11,54 @@ const SERVER_LABELS: Record<string, string> = {
 export function InstanceCard({ instance }: { instance: Instance }) {
   return (
     <Link href={`/admin/instance/${instance.uuid}`}>
-      <div className="admin-card rounded-2xl p-6 cursor-pointer group relative overflow-hidden">
-        {/* Top gradient shine */}
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-violet-500/40 to-transparent" />
-
-        <div className="flex items-start justify-between mb-5">
-          <div className="flex items-center gap-3.5">
-            <div className="relative">
-              <HealthBadge status={instance.health} />
-              <div className={`absolute inset-0 rounded-full blur-[6px] opacity-40 ${
-                instance.health === "healthy" ? "bg-emerald-400" :
-                instance.health === "unhealthy" ? "bg-yellow-400" :
-                instance.health === "stopped" ? "bg-red-400" : "bg-gray-400"
-              }`} />
-            </div>
-            <h3 className="text-base font-semibold text-white/95 group-hover:text-white transition-colors tracking-tight">
+      <div className="admin-card-interactive p-4 group">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2.5">
+            <HealthBadge status={instance.health} />
+            <h3 className="text-[13px] font-medium text-admin-primary tracking-tight">
               {instance.name}
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-white/30 bg-white/[0.05] px-2.5 py-1 rounded-md border border-white/[0.04]">
+          <span className="text-[10px] font-mono text-admin-tertiary">
             {SERVER_LABELS[instance.server] || instance.server}
           </span>
         </div>
 
-        <div className="space-y-3 text-sm text-white/40">
+        <div className="space-y-1.5 text-[12px]">
           {instance.botUsername && (
-            <div className="flex justify-between items-center">
-              <span className="text-xs">Bot</span>
-              <span className="text-white/70 font-mono text-xs">@{instance.botUsername}</span>
+            <div className="flex justify-between">
+              <span className="text-admin-tertiary">Bot</span>
+              <span className="text-admin-secondary font-mono">@{instance.botUsername}</span>
             </div>
           )}
           {instance.primaryModel && (
-            <div className="flex justify-between items-center">
-              <span className="text-xs">Model</span>
-              <span className="text-white/60 font-mono text-xs truncate ml-6 max-w-[180px]">
+            <div className="flex justify-between">
+              <span className="text-admin-tertiary">Model</span>
+              <span className="text-admin-secondary font-mono truncate ml-4 max-w-[160px]">
                 {instance.primaryModel}
               </span>
             </div>
           )}
-          <div className="flex justify-between items-center">
-            <span className="text-xs">Key</span>
-            <span
-              className={`font-mono uppercase text-[11px] px-2 py-0.5 rounded-md font-medium ${
-                instance.apiKeyType === "oauth"
-                  ? "bg-amber-500/15 text-amber-300/90 border border-amber-500/20"
-                  : instance.apiKeyType === "api"
-                    ? "bg-emerald-500/15 text-emerald-300/90 border border-emerald-500/20"
-                    : "bg-white/5 text-white/40 border border-white/[0.06]"
-              }`}
-            >
+          <div className="flex justify-between">
+            <span className="text-admin-tertiary">Key</span>
+            <span className={`font-mono text-[11px] ${
+              instance.apiKeyType === "oauth" ? "text-amber-500" :
+              instance.apiKeyType === "api" ? "text-emerald-500" :
+              "text-admin-tertiary"
+            }`}>
               {instance.apiKeyType}
             </span>
           </div>
-          {instance.memoryMb !== null && (
-            <div className="flex justify-between items-center">
-              <span className="text-xs">Memory</span>
-              <span className="metric-value text-white/60 text-xs">
-                {Math.round(instance.memoryMb)} MB
-              </span>
+          {(instance.cronJobCount !== undefined && instance.cronJobCount > 0) && (
+            <div className="flex justify-between">
+              <span className="text-admin-tertiary">Cron</span>
+              <span className="text-admin-secondary">{instance.cronJobCount}</span>
+            </div>
+          )}
+          {(instance.activeSessionCount !== undefined && instance.activeSessionCount > 0) && (
+            <div className="flex justify-between">
+              <span className="text-admin-tertiary">Sessions</span>
+              <span className="text-admin-secondary">{instance.activeSessionCount}</span>
             </div>
           )}
         </div>

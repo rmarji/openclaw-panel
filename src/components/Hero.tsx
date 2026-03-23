@@ -106,7 +106,7 @@ export function Hero() {
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
             </span>
             <span className="text-[12px] font-medium text-[var(--text-secondary)]" style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.04em" }}>
-              8 agents handling 247 tasks right now
+              Founding member pricing — limited spots
             </span>
           </span>
         </motion.div>
@@ -125,7 +125,7 @@ export function Hero() {
           variants={fadeUp}
           className="body-large mx-auto mt-8 max-w-2xl text-center"
         >
-          120+ teams replaced <span className="text-[var(--text)]">6+ hours of daily busywork</span> with
+          Our founding teams cut <span className="text-[var(--text)]">6+ hours of weekly busywork</span> with
           AI agents that read their email, manage their calendar, triage Slack,
           review PRs, and never take a day off.
           <span className="text-[var(--text)]"> Starting at $29/mo.</span>
@@ -143,10 +143,10 @@ export function Hero() {
             </svg>
           </a>
           <a href="#demo" className="btn-secondary">
+            <span>See a live demo</span>
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
             </svg>
-            <span>Watch it work (47 sec)</span>
           </a>
         </motion.div>
 

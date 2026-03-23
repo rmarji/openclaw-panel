@@ -16,7 +16,6 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
     function tick(now: number) {
       const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
-      // Ease out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setValue(Math.floor(eased * target));
       if (progress < 1) requestAnimationFrame(tick);
@@ -34,10 +33,10 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
 }
 
 const stats = [
-  { value: 120, suffix: "+", label: "Teams deployed" },
-  { value: 2, suffix: "M+", label: "Messages processed" },
+  { value: 8, suffix: "", label: "Founding teams" },
+  { value: 60, suffix: "%", label: "Avg. cost reduction" },
   { value: 99, suffix: ".9%", label: "Uptime" },
-  { value: 23, suffix: "", label: "Routing dimensions" },
+  { value: 5, suffix: " min", label: "Setup time" },
 ];
 
 export function Stats() {

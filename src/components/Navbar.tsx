@@ -59,7 +59,7 @@ export function Navbar() {
           <div className="mx-3 h-4 w-px bg-[var(--border)]" />
 
           <a
-            href="#"
+            href="/admin/login"
             className="rounded-lg px-4 py-2 text-[13px] font-medium text-[var(--text-secondary)] transition-colors duration-200 hover:text-[var(--text)]"
           >
             Sign In
@@ -105,7 +105,7 @@ export function Navbar() {
               {[
                 { label: "Features", href: "#features" },
                 { label: "Pricing", href: "#pricing" },
-                { label: "Sign In", href: "#" },
+                { label: "Sign In", href: "/admin/login" },
               ].map((link) => (
                 <a
                   key={link.label}

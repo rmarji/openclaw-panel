@@ -1,7 +1,7 @@
 import initSqlJs, { type Database } from "sql.js";
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import path from "path";
-import type { Instance, SpendLog, EvalScore } from "./types";
+import type { Instance, SpendLog, EvalScore, CronJob, Session } from "./types";
 
 const DB_PATH = process.env.CACHE_DB_PATH || "/tmp/admin-cache.db";
 let db: Database | null = null;
@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS instances (
   manifest_tier TEXT,
   dm_policy TEXT,
   allow_from TEXT,
+  cron_job_count INTEGER DEFAULT 0,
+  active_session_count INTEGER DEFAULT 0,
   updated_at TEXT DEFAULT (datetime('now'))
 );
 CREATE TABLE IF NOT EXISTS spend_logs (
@@ -68,6 +70,29 @@ CREATE INDEX IF NOT EXISTS idx_spend_model_group ON spend_logs(model_group);
 CREATE INDEX IF NOT EXISTS idx_spend_instance ON spend_logs(instance_name);
 CREATE INDEX IF NOT EXISTS idx_eval_instance ON eval_scores(instance_name, evaluator);
 CREATE INDEX IF NOT EXISTS idx_eval_timestamp ON eval_scores(timestamp);
+CREATE TABLE IF NOT EXISTS cron_jobs (
+  id TEXT PRIMARY KEY,
+  instance_uuid TEXT NOT NULL,
+  name TEXT NOT NULL,
+  schedule TEXT,
+  status TEXT DEFAULT 'unknown',
+  last_run TEXT,
+  next_run TEXT,
+  agent TEXT,
+  updated_at TEXT DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS sessions (
+  id TEXT PRIMARY KEY,
+  instance_uuid TEXT NOT NULL,
+  agent_name TEXT NOT NULL,
+  channel_type TEXT,
+  message_count INTEGER DEFAULT 0,
+  started_at TEXT,
+  last_activity TEXT,
+  updated_at TEXT DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_cron_instance ON cron_jobs(instance_uuid);
+CREATE INDEX IF NOT EXISTS idx_sessions_instance ON sessions(instance_uuid);
 `;
 
 export async function getDb(): Promise<Database> {
@@ -121,6 +146,8 @@ export async function getInstance(uuid: string): Promise<Instance | null> {
     manifestTier: row.manifest_tier as string | null,
     dmPolicy: row.dm_policy as Instance["dmPolicy"],
     allowFrom: row.allow_from ? JSON.parse(row.allow_from as string) : null,
+    cronJobCount: (row.cron_job_count as number) || 0,
+    activeSessionCount: (row.active_session_count as number) || 0,
     updatedAt: row.updated_at as string,
   };
 }
@@ -128,13 +155,14 @@ export async function getInstance(uuid: string): Promise<Instance | null> {
 export async function upsertInstance(inst: Partial<Instance> & { uuid: string }): Promise<void> {
   const d = await getDb();
   d.run(
-    `INSERT OR REPLACE INTO instances (uuid, name, server, domain, bot_username, bot_token_prefix, health, primary_model, api_key_type, memory_mb, last_telegram_activity, manifest_tier, dm_policy, allow_from, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+    `INSERT OR REPLACE INTO instances (uuid, name, server, domain, bot_username, bot_token_prefix, health, primary_model, api_key_type, memory_mb, last_telegram_activity, manifest_tier, dm_policy, allow_from, cron_job_count, active_session_count, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
     [inst.uuid, inst.name ?? "", inst.server ?? "unknown", inst.domain ?? null,
      inst.botUsername ?? null, inst.botTokenPrefix ?? null, inst.health ?? "unknown",
      inst.primaryModel ?? null, inst.apiKeyType ?? "unknown", inst.memoryMb ?? null,
      inst.lastTelegramActivity ?? null, inst.manifestTier ?? null, inst.dmPolicy ?? null,
-     inst.allowFrom ? JSON.stringify(inst.allowFrom) : null]
+     inst.allowFrom ? JSON.stringify(inst.allowFrom) : null,
+     inst.cronJobCount ?? 0, inst.activeSessionCount ?? 0]
   );
 }
 
@@ -231,6 +259,75 @@ function rowToInstance(columns: string[], row: unknown[]): Instance {
     manifestTier: obj.manifest_tier as string | null,
     dmPolicy: obj.dm_policy as Instance["dmPolicy"],
     allowFrom: obj.allow_from ? JSON.parse(obj.allow_from as string) : null,
+    cronJobCount: (obj.cron_job_count as number) || 0,
+    activeSessionCount: (obj.active_session_count as number) || 0,
     updatedAt: obj.updated_at as string,
   };
+}
+
+export async function upsertCronJob(job: CronJob): Promise<void> {
+  const d = await getDb();
+  d.run(
+    `INSERT OR REPLACE INTO cron_jobs (id, instance_uuid, name, schedule, status, last_run, next_run, agent, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+    [job.id, job.instanceUuid, job.name, job.schedule, job.status, job.lastRun, job.nextRun, job.agent]
+  );
+}
+
+export async function getCronJobsByInstance(instanceUuid: string): Promise<CronJob[]> {
+  const d = await getDb();
+  const rows = d.exec(`SELECT * FROM cron_jobs WHERE instance_uuid = ? ORDER BY name`, [instanceUuid]);
+  if (!rows.length) return [];
+  return rows[0].values.map((row) => {
+    const obj: Record<string, unknown> = {};
+    rows[0].columns.forEach((col, i) => { obj[col] = row[i]; });
+    return {
+      id: obj.id as string,
+      instanceUuid: obj.instance_uuid as string,
+      name: obj.name as string,
+      schedule: obj.schedule as string,
+      status: (obj.status as CronJob["status"]) || "unknown",
+      lastRun: obj.last_run as string | null,
+      nextRun: obj.next_run as string | null,
+      agent: obj.agent as string | null,
+    };
+  });
+}
+
+export async function clearCronJobsForInstance(instanceUuid: string): Promise<void> {
+  const d = await getDb();
+  d.run("DELETE FROM cron_jobs WHERE instance_uuid = ?", [instanceUuid]);
+}
+
+export async function upsertSession(session: Session): Promise<void> {
+  const d = await getDb();
+  d.run(
+    `INSERT OR REPLACE INTO sessions (id, instance_uuid, agent_name, channel_type, message_count, started_at, last_activity, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+    [session.id, session.instanceUuid, session.agentName, session.channelType, session.messageCount, session.startedAt, session.lastActivity]
+  );
+}
+
+export async function getSessionsByInstance(instanceUuid: string): Promise<Session[]> {
+  const d = await getDb();
+  const rows = d.exec(`SELECT * FROM sessions WHERE instance_uuid = ? ORDER BY started_at DESC`, [instanceUuid]);
+  if (!rows.length) return [];
+  return rows[0].values.map((row) => {
+    const obj: Record<string, unknown> = {};
+    rows[0].columns.forEach((col, i) => { obj[col] = row[i]; });
+    return {
+      id: obj.id as string,
+      instanceUuid: obj.instance_uuid as string,
+      agentName: obj.agent_name as string,
+      channelType: obj.channel_type as string,
+      messageCount: (obj.message_count as number) || 0,
+      startedAt: obj.started_at as string,
+      lastActivity: obj.last_activity as string | null,
+    };
+  });
+}
+
+export async function clearSessionsForInstance(instanceUuid: string): Promise<void> {
+  const d = await getDb();
+  d.run("DELETE FROM sessions WHERE instance_uuid = ?", [instanceUuid]);
 }

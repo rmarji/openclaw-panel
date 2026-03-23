@@ -10,25 +10,23 @@ export function PricingSection() {
 
   return (
     <section id="pricing" className="relative py-24 sm:py-32">
-      {/* Grid pattern background */}
       <div className="absolute inset-0 grid-pattern opacity-50" />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Header */}
+        {/* Header — DR voice, not template */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center"
         >
-          <span className="inline-block rounded-full border border-violet-500/20 bg-violet-500/5 px-4 py-1.5 text-xs font-medium tracking-wider text-violet-400 uppercase">
-            Pricing
-          </span>
-          <h2 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-            Plans that scale with you
+          <span className="label-mono">Pricing</span>
+          <h2 className="heading-section mt-6">
+            One price. Zero busywork
+            <span className="text-[var(--accent)]">.</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-zinc-400">
-            Start with one agent. Scale to a full team. Every plan includes a 14-day free trial.
+          <p className="mx-auto mt-4 max-w-xl text-lg text-[var(--text-secondary)]">
+            Every plan includes a 14-day free trial. Pick the one that fits and switch anytime.
           </p>
         </motion.div>
 
@@ -40,17 +38,11 @@ export function PricingSection() {
           transition={{ delay: 0.1 }}
           className="mt-10 flex items-center justify-center gap-4"
         >
-          <span
-            className={`text-sm font-medium transition ${
-              billingPeriod === "monthly" ? "text-white" : "text-zinc-500"
-            }`}
-          >
+          <span className={`text-sm font-medium transition ${billingPeriod === "monthly" ? "text-[var(--text)]" : "text-[var(--text-tertiary)]"}`}>
             Monthly
           </span>
           <button
-            onClick={() =>
-              setBillingPeriod(billingPeriod === "monthly" ? "yearly" : "monthly")
-            }
+            onClick={() => setBillingPeriod(billingPeriod === "monthly" ? "yearly" : "monthly")}
             className="relative h-7 w-12 rounded-full bg-white/[0.06] transition hover:bg-white/[0.1]"
           >
             <motion.span
@@ -58,16 +50,12 @@ export function PricingSection() {
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
               className={`absolute top-0.5 h-6 w-6 rounded-full ${
                 billingPeriod === "yearly"
-                  ? "left-[1.375rem] bg-violet-500"
-                  : "left-0.5 bg-zinc-400"
+                  ? "left-[1.375rem] bg-[var(--accent)]"
+                  : "left-0.5 bg-[var(--text-tertiary)]"
               }`}
             />
           </button>
-          <span
-            className={`text-sm font-medium transition ${
-              billingPeriod === "yearly" ? "text-white" : "text-zinc-500"
-            }`}
-          >
+          <span className={`text-sm font-medium transition ${billingPeriod === "yearly" ? "text-[var(--text)]" : "text-[var(--text-tertiary)]"}`}>
             Yearly
           </span>
           {billingPeriod === "yearly" && (
@@ -81,7 +69,7 @@ export function PricingSection() {
           )}
         </motion.div>
 
-        {/* Active coupons */}
+        {/* Active coupons — shown as badges, auto-applied */}
         {activeCoupons.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -93,27 +81,17 @@ export function PricingSection() {
             {activeCoupons.map((coupon) => (
               <div
                 key={coupon.code}
-                className="glass flex items-center gap-2 rounded-full px-4 py-2 text-sm"
+                className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm"
               >
-                <span className="flex h-5 w-5 items-center justify-center rounded bg-violet-500/10">
-                  <svg
-                    className="h-3 w-3 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"
-                    />
+                <span className="flex h-5 w-5 items-center justify-center rounded bg-[var(--accent-muted)]">
+                  <svg className="h-3 w-3 text-[var(--accent)]" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
                   </svg>
                 </span>
-                <span className="font-mono text-sm font-bold tracking-wider text-violet-300">
+                <span className="font-mono text-sm font-bold tracking-wider text-[var(--accent)]">
                   {coupon.code}
                 </span>
-                <span className="text-sm text-zinc-300">{coupon.description}</span>
+                <span className="text-sm text-[var(--text-secondary)]">{coupon.description}</span>
               </div>
             ))}
           </motion.div>
@@ -134,36 +112,24 @@ export function PricingSection() {
           transition={{ delay: 0.3 }}
           className="mt-16 text-center"
         >
-          <div className="mx-auto flex max-w-md flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-zinc-600">
+          <div className="mx-auto flex max-w-lg flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--text-tertiary)]">
             <span className="flex items-center gap-1.5">
               <svg className="h-4 w-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
-                  clipRule="evenodd"
-                />
+                <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
               </svg>
-              Secure payments
+              Stripe-secured payments
             </span>
             <span className="flex items-center gap-1.5">
               <svg className="h-4 w-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clipRule="evenodd"
-                />
+                <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
               </svg>
-              14-day free trial
+              14-day free trial on all plans
             </span>
             <span className="flex items-center gap-1.5">
               <svg className="h-4 w-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clipRule="evenodd"
-                />
+                <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
               </svg>
-              Cancel anytime
+              Cancel in one click
             </span>
           </div>
         </motion.div>

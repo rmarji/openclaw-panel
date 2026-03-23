@@ -9,13 +9,13 @@ export function JsonViewer({ data, title }: { data: any; title?: string }) {
     <div className="admin-card rounded-lg overflow-hidden">
       {title && (
         <button onClick={() => setCollapsed(!collapsed)}
-          className="w-full flex items-center justify-between px-4 py-3 text-xs text-white/50 hover:text-white/70 border-b border-white/[0.04]">
+          className="w-full flex items-center justify-between px-4 py-3 text-xs text-admin-secondary hover:text-admin-primary border-b border-admin-border transition-colors">
           <span className="font-medium uppercase tracking-wide">{title}</span>
-          <span>{collapsed ? "▸" : "▾"}</span>
+          <span>{collapsed ? "\u25B8" : "\u25BE"}</span>
         </button>
       )}
       {!collapsed && (
-        <pre className="p-4 text-[11px] leading-relaxed text-white/60 font-mono overflow-x-auto max-h-[500px] overflow-y-auto">
+        <pre className="p-4 text-[11px] leading-relaxed text-admin-secondary font-mono overflow-x-auto max-h-[500px] overflow-y-auto">
           {json}
         </pre>
       )}

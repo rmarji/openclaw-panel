@@ -24,14 +24,14 @@ const rows = [
 function Cell({ value }: { value: string | boolean }) {
   if (typeof value === "boolean") {
     return value ? (
-      <svg className="mx-auto h-5 w-5 text-violet-400" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+      <svg className="mx-auto h-5 w-5 text-[var(--accent)]" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
       </svg>
     ) : (
-      <span className="mx-auto block h-0.5 w-4 rounded bg-zinc-700" />
+      <span className="mx-auto block h-0.5 w-4 rounded bg-[var(--border)]" />
     );
   }
-  return <span className="text-sm text-zinc-300">{value}</span>;
+  return <span className="text-sm text-[var(--text-secondary)]">{value}</span>;
 }
 
 export function ComparisonTable() {
@@ -44,11 +44,11 @@ export function ComparisonTable() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Compare plans
+          <h2 className="heading-section">
+            What&apos;s in each plan
           </h2>
-          <p className="mt-3 text-lg text-zinc-400">
-            See exactly what you get at each tier
+          <p className="mt-3 text-lg text-[var(--text-secondary)]">
+            Side-by-side, no surprises
           </p>
         </motion.div>
 
@@ -57,23 +57,23 @@ export function ComparisonTable() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="glass mt-12 overflow-hidden rounded-2xl"
+          className="mt-12 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]"
         >
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-white/5">
-                  <th className="px-6 py-4 text-left text-sm font-medium text-zinc-400">
+                <tr className="border-b border-[var(--border)]">
+                  <th className="px-6 py-4 text-left text-sm font-medium text-[var(--text-secondary)]">
                     Feature
                   </th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-white">
+                  <th className="px-6 py-4 text-center text-sm font-semibold text-[var(--text)]">
                     Starter
                   </th>
-                  <th className="relative px-6 py-4 text-center text-sm font-semibold text-white">
+                  <th className="relative px-6 py-4 text-center text-sm font-semibold text-[var(--text)]">
                     <span className="relative z-10">Pro</span>
-                    <div className="absolute inset-x-0 top-0 h-full bg-violet-500/5" />
+                    <div className="absolute inset-x-0 top-0 h-full bg-[var(--accent-muted)]" />
                   </th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-white">
+                  <th className="px-6 py-4 text-center text-sm font-semibold text-[var(--text)]">
                     Team
                   </th>
                 </tr>
@@ -82,11 +82,11 @@ export function ComparisonTable() {
                 {rows.map((row, i) => (
                   <tr
                     key={row.feature}
-                    className={`border-b border-white/[0.03] transition hover:bg-white/[0.02] ${
+                    className={`border-b border-[var(--border)]/30 transition hover:bg-white/[0.01] ${
                       i === rows.length - 1 ? "border-none" : ""
                     }`}
                   >
-                    <td className="px-6 py-3.5 text-sm text-zinc-400">
+                    <td className="px-6 py-3.5 text-sm text-[var(--text-secondary)]">
                       {row.feature}
                     </td>
                     <td className="px-6 py-3.5 text-center">
@@ -96,7 +96,7 @@ export function ComparisonTable() {
                       <div className="relative z-10">
                         <Cell value={row.pro} />
                       </div>
-                      <div className="absolute inset-x-0 top-0 h-full bg-violet-500/5" />
+                      <div className="absolute inset-x-0 top-0 h-full bg-[var(--accent-muted)]" />
                     </td>
                     <td className="px-6 py-3.5 text-center">
                       <Cell value={row.team} />

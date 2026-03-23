@@ -23,14 +23,19 @@ export function Footer() {
 
           {/* Links */}
           <div className="flex gap-8">
-            {["Privacy", "Terms", "Status", "Contact"].map((link) => (
+            {[
+              { label: "Privacy", href: "/privacy" },
+              { label: "Terms", href: "/terms" },
+              { label: "Status", href: "/status" },
+              { label: "Contact", href: "mailto:hello@clawgeeks.com" },
+            ].map((link) => (
               <a
-                key={link}
-                href="#"
+                key={link.label}
+                href={link.href}
                 className="text-[12px] text-[var(--text-tertiary)] transition-colors duration-200 hover:text-[var(--text-secondary)]"
                 style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.04em" }}
               >
-                {link}
+                {link.label}
               </a>
             ))}
           </div>

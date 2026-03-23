@@ -115,6 +115,61 @@ async function refreshInstance(svc: any, errors: string[]): Promise<void> {
     errors.push(`Health ${name}: ${e.message}`);
   }
 
+  // Fetch cron jobs and sessions in parallel
+  let cronJobCount = 0;
+  let activeSessionCount = 0;
+  try {
+    const [cronResult, sessionsResult] = await Promise.allSettled([
+      ssh.execRemote(remoteServer, `docker exec ${containerName} openclaw cron list --json 2>/dev/null || echo "[]"`),
+      ssh.execRemote(remoteServer, `docker exec ${containerName} openclaw sessions --all-agents --json 2>/dev/null || echo "[]"`),
+    ]);
+
+    // Parse cron jobs
+    if (cronResult.status === "fulfilled") {
+      try {
+        const raw = cronResult.value.trim();
+        const cronData = JSON.parse(raw.startsWith("[") ? raw : "[]");
+        await cache.clearCronJobsForInstance(uuid);
+        for (const job of cronData) {
+          cronJobCount++;
+          await cache.upsertCronJob({
+            id: `${uuid}-${job.name || job.id || cronJobCount}`,
+            instanceUuid: uuid,
+            name: job.name || job.id || `job-${cronJobCount}`,
+            schedule: job.schedule || job.cron || "",
+            status: (job.status || "unknown").toLowerCase() as any,
+            lastRun: job.lastRun || job.last_run || null,
+            nextRun: job.nextRun || job.next_run || null,
+            agent: job.agent || job.agentName || job.agent_name || null,
+          });
+        }
+      } catch { /* cron parse failed, skip */ }
+    }
+
+    // Parse sessions
+    if (sessionsResult.status === "fulfilled") {
+      try {
+        const raw = sessionsResult.value.trim();
+        const sessionsData = JSON.parse(raw.startsWith("[") ? raw : "[]");
+        await cache.clearSessionsForInstance(uuid);
+        for (const sess of sessionsData) {
+          activeSessionCount++;
+          await cache.upsertSession({
+            id: `${uuid}-${sess.id || sess.sessionId || sess.session_id || activeSessionCount}`,
+            instanceUuid: uuid,
+            agentName: sess.agentName || sess.agent_name || sess.agent || "default",
+            channelType: sess.channelType || sess.channel_type || sess.channel || "unknown",
+            messageCount: sess.messageCount || sess.message_count || sess.messages || 0,
+            startedAt: sess.startedAt || sess.started_at || sess.start || new Date().toISOString(),
+            lastActivity: sess.lastActivity || sess.last_activity || sess.lastMessage || null,
+          });
+        }
+      } catch { /* sessions parse failed, skip */ }
+    }
+  } catch (e: any) {
+    errors.push(`Cron/Sessions ${name}: ${e.message}`);
+  }
+
   // Try to get primary model and dm policy from openclaw.json
   let primaryModel: string | null = null;
   let dmPolicy: Instance["dmPolicy"] = null;
@@ -143,6 +198,7 @@ async function refreshInstance(svc: any, errors: string[]): Promise<void> {
     lastTelegramActivity: null,
     manifestTier: null,
     dmPolicy, allowFrom,
+    cronJobCount, activeSessionCount,
   });
 }
 

@@ -1,9 +1,24 @@
 "use client";
 
-import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 
-export default function SuccessPage() {
+function SuccessRedirect() {
+  const params = useSearchParams();
+
+  useEffect(() => {
+    // Short delay to show the success animation, then redirect to onboarding
+    const timer = setTimeout(() => {
+      const sessionId = params.get("session_id");
+      const url = sessionId
+        ? `/onboarding?session_id=${sessionId}`
+        : "/onboarding";
+      window.location.href = url;
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [params]);
+
   return (
     <div className="flex min-h-screen items-center justify-center">
       <motion.div
@@ -25,27 +40,43 @@ export default function SuccessPage() {
               strokeWidth={2.5}
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
             </motion.svg>
           </div>
         </div>
 
-        <h1 className="mt-8 text-3xl font-bold text-white">You&apos;re all set!</h1>
+        <h1 className="mt-8 text-3xl font-bold text-white">
+          Payment confirmed!
+        </h1>
         <p className="mx-auto mt-3 max-w-md text-zinc-400">
-          Your subscription is active. We&apos;re spinning up your AI agent now — expect a
-          Telegram message within a few minutes.
+          Setting up your account...
         </p>
 
-        <Link
-          href="/"
-          className="mt-8 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-violet-500"
-        >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-          </svg>
-          Back to Home
-        </Link>
+        <div className="mt-6 flex items-center justify-center gap-2">
+          <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-sm text-zinc-500">
+            Redirecting to onboarding
+          </span>
+        </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="text-zinc-500 text-sm">Loading...</div>
+        </div>
+      }
+    >
+      <SuccessRedirect />
+    </Suspense>
   );
 }

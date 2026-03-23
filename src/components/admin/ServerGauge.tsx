@@ -32,7 +32,7 @@ export function ServerGauge({ value, label, detail, color = "violet" }: Props) {
           cy="48"
           r="40"
           fill="none"
-          stroke="rgba(255,255,255,0.04)"
+          className="stroke-admin-border"
           strokeWidth="6"
         />
         <circle
@@ -52,7 +52,7 @@ export function ServerGauge({ value, label, detail, color = "violet" }: Props) {
           x="48"
           y="44"
           textAnchor="middle"
-          className="fill-white font-bold"
+          className="fill-admin-primary font-bold"
           style={{ fontSize: "18px" }}
         >
           {Math.round(value)}%
@@ -61,14 +61,14 @@ export function ServerGauge({ value, label, detail, color = "violet" }: Props) {
           x="48"
           y="60"
           textAnchor="middle"
-          className="fill-white/30"
+          className="fill-admin-tertiary"
           style={{ fontSize: "9px" }}
         >
           {label}
         </text>
       </svg>
       {detail && (
-        <span className="text-[10px] text-white/25 font-mono">{detail}</span>
+        <span className="text-[10px] text-admin-tertiary font-mono">{detail}</span>
       )}
     </div>
   );

@@ -23,6 +23,28 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/node_modules/sql.js ./node_modules/sql.js
 COPY --from=builder /app/node_modules/node-ssh ./node_modules/node-ssh
 COPY --from=builder /app/node_modules/ssh2 ./node_modules/ssh2
+# pg (postgres driver) for Drizzle ORM
+COPY --from=builder /app/node_modules/pg ./node_modules/pg
+COPY --from=builder /app/node_modules/pg-types ./node_modules/pg-types
+COPY --from=builder /app/node_modules/pg-pool ./node_modules/pg-pool
+COPY --from=builder /app/node_modules/pg-protocol ./node_modules/pg-protocol
+COPY --from=builder /app/node_modules/pg-connection-string ./node_modules/pg-connection-string
+COPY --from=builder /app/node_modules/pgpass ./node_modules/pgpass
+COPY --from=builder /app/node_modules/pg-int8 ./node_modules/pg-int8
+COPY --from=builder /app/node_modules/postgres-array ./node_modules/postgres-array
+COPY --from=builder /app/node_modules/postgres-bytea ./node_modules/postgres-bytea
+COPY --from=builder /app/node_modules/postgres-date ./node_modules/postgres-date
+COPY --from=builder /app/node_modules/postgres-interval ./node_modules/postgres-interval
+COPY --from=builder /app/node_modules/postgres-range ./node_modules/postgres-range
+COPY --from=builder /app/node_modules/buffer-writer ./node_modules/buffer-writer
+COPY --from=builder /app/node_modules/packet-reader ./node_modules/packet-reader
+COPY --from=builder /app/node_modules/split2 ./node_modules/split2
+# next-auth / @auth packages
+COPY --from=builder /app/node_modules/next-auth ./node_modules/next-auth
+COPY --from=builder /app/node_modules/@auth ./node_modules/@auth
+
+# Migration SQL (for init)
+COPY --from=builder /app/drizzle ./drizzle
 
 RUN mkdir -p /data && chown nextjs:nodejs /data
 

@@ -4,7 +4,7 @@ import { refreshAll } from "./refresh";
 import { isAuthenticated } from "./auth";
 import * as coolify from "./coolify";
 import * as ssh from "./ssh";
-import type { FleetSummary, CacheStatus, Instance } from "./types";
+import type { FleetSummary, CacheStatus, Instance, CronJob, Session } from "./types";
 
 export async function getFleetData(): Promise<{
   instances: Instance[];
@@ -21,6 +21,8 @@ export async function getFleetData(): Promise<{
     stopped: instances.filter((i) => i.health === "stopped").length,
     unknown: instances.filter((i) => i.health === "unknown").length,
     byServer: {},
+    totalCronJobs: instances.reduce((sum, i) => sum + (i.cronJobCount || 0), 0),
+    totalActiveSessions: instances.reduce((sum, i) => sum + (i.activeSessionCount || 0), 0),
   };
   for (const inst of instances) {
     summary.byServer[inst.server] = (summary.byServer[inst.server] || 0) + 1;
@@ -68,7 +70,9 @@ export async function getInstanceDetail(uuid: string) {
   const allScores = await cache.getEvalScores(7);
   const instanceScores = allScores.filter(s => s.instanceName && instance.name.includes(s.instanceName));
 
-  return { instance, envVars, openclawConfig, evalScores: instanceScores };
+  const cronJobs = await cache.getCronJobsByInstance(uuid);
+  const sessions = await cache.getSessionsByInstance(uuid);
+  return { instance, envVars, openclawConfig, evalScores: instanceScores, cronJobs, sessions };
 }
 
 export async function getContainerLogs(uuid: string, since?: string) {
@@ -83,6 +87,16 @@ export async function getContainerLogs(uuid: string, since?: string) {
   } catch (e: any) {
     return `Error: ${e.message}`;
   }
+}
+
+export async function getInstanceCronJobs(uuid: string): Promise<CronJob[]> {
+  if (!(await isAuthenticated())) throw new Error("Unauthorized");
+  return cache.getCronJobsByInstance(uuid);
+}
+
+export async function getInstanceSessions(uuid: string): Promise<Session[]> {
+  if (!(await isAuthenticated())) throw new Error("Unauthorized");
+  return cache.getSessionsByInstance(uuid);
 }
 
 export async function getAnalyticsData(days: number = 7) {

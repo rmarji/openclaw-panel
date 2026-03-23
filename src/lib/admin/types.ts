@@ -13,6 +13,8 @@ export interface Instance {
   manifestTier: string | null;
   dmPolicy: "pairing" | "allowlist" | "open" | null;
   allowFrom: number[] | null;
+  cronJobCount?: number;
+  activeSessionCount?: number;
   updatedAt: string;
 }
 
@@ -75,6 +77,8 @@ export interface FleetSummary {
   stopped: number;
   unknown: number;
   byServer: Record<string, number>;
+  totalCronJobs: number;
+  totalActiveSessions: number;
 }
 
 export interface EvalSummary {
@@ -92,4 +96,31 @@ export interface SpendSummary {
   totalRequests: number;
   totalTokensIn: number;
   totalTokensOut: number;
+}
+
+export interface CronJob {
+  id: string;
+  instanceUuid: string;
+  name: string;
+  schedule: string;
+  status: "active" | "paused" | "error" | "unknown";
+  lastRun: string | null;
+  nextRun: string | null;
+  agent: string | null;
+}
+
+export interface Session {
+  id: string;
+  instanceUuid: string;
+  agentName: string;
+  channelType: string;
+  messageCount: number;
+  startedAt: string;
+  lastActivity: string | null;
+}
+
+export interface AgentInfo {
+  name: string;
+  model: string | null;
+  status: "active" | "idle" | "error";
 }

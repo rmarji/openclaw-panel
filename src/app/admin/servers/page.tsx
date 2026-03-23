@@ -84,23 +84,21 @@ export default async function ServersPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-white mb-8 tracking-tight">
-        Server Health
-      </h1>
+      <h1 className="admin-heading-page mb-8">Server Health</h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {servers.map((metrics, i) =>
           metrics ? (
             <div key={metrics.server} className="admin-card rounded-xl p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-base font-semibold text-white/90">
+                  <h2 className="text-base font-semibold text-admin-primary">
                     {metrics.server}
                   </h2>
-                  <p className="text-xs text-white/25 mt-0.5">
+                  <p className="text-xs text-admin-tertiary mt-0.5">
                     {metrics.uptime}
                   </p>
                 </div>
-                <span className="text-xs text-white/15 font-mono">
+                <span className="text-xs text-admin-tertiary font-mono">
                   {metrics.containerCount} containers
                 </span>
               </div>
@@ -130,19 +128,17 @@ export default async function ServersPage() {
                   color="emerald"
                 />
               </div>
-              <h3 className="text-xs text-white/25 mb-3 tracking-wide uppercase">
-                Top Containers
-              </h3>
+              <h3 className="admin-heading-card mb-3">Top Containers</h3>
               <div className="space-y-1.5">
                 {metrics.containers.slice(0, 5).map((c) => (
                   <div
                     key={c.name}
-                    className="flex justify-between text-xs py-1 px-2 rounded bg-white/[0.02]"
+                    className="flex justify-between text-xs py-1 px-2 rounded bg-admin-surface-raised admin-row-hover"
                   >
-                    <span className="text-white/50 font-mono truncate mr-4">
+                    <span className="text-admin-secondary font-mono truncate mr-4">
                       {c.name}
                     </span>
-                    <span className="metric-value text-white/40 whitespace-nowrap">
+                    <span className="metric-value text-admin-tertiary whitespace-nowrap">
                       {Math.round(c.memoryMb)} MB
                     </span>
                   </div>
@@ -154,7 +150,7 @@ export default async function ServersPage() {
               key={`unreachable-${i}`}
               className="admin-card rounded-xl p-6 flex items-center justify-center min-h-[300px]"
             >
-              <p className="text-white/20 text-sm">Server unreachable</p>
+              <p className="text-admin-tertiary text-sm">Server unreachable</p>
             </div>
           ),
         )}

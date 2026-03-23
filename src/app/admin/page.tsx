@@ -13,12 +13,12 @@ export default async function FleetPage() {
       {cacheStatus.isStale && <StaleDataBanner />}
       {instances.length === 0 ? (
         <div className="text-center py-24">
-          <p className="text-white/20 text-sm">
+          <p className="text-admin-tertiary text-sm">
             No instances found. Trigger a cache refresh to populate.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
           {instances.map((inst) => (
             <InstanceCard key={inst.uuid} instance={inst} />
           ))}
