@@ -23,7 +23,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/node_modules/sql.js ./node_modules/sql.js
 COPY --from=builder /app/node_modules/node-ssh ./node_modules/node-ssh
 COPY --from=builder /app/node_modules/ssh2 ./node_modules/ssh2
-# pg (postgres driver) for Drizzle ORM
+# pg (postgres driver) for Drizzle ORM — copy only packages that exist
 COPY --from=builder /app/node_modules/pg ./node_modules/pg
 COPY --from=builder /app/node_modules/pg-types ./node_modules/pg-types
 COPY --from=builder /app/node_modules/pg-pool ./node_modules/pg-pool
@@ -35,10 +35,8 @@ COPY --from=builder /app/node_modules/postgres-array ./node_modules/postgres-arr
 COPY --from=builder /app/node_modules/postgres-bytea ./node_modules/postgres-bytea
 COPY --from=builder /app/node_modules/postgres-date ./node_modules/postgres-date
 COPY --from=builder /app/node_modules/postgres-interval ./node_modules/postgres-interval
-COPY --from=builder /app/node_modules/postgres-range ./node_modules/postgres-range
-COPY --from=builder /app/node_modules/buffer-writer ./node_modules/buffer-writer
-COPY --from=builder /app/node_modules/packet-reader ./node_modules/packet-reader
 COPY --from=builder /app/node_modules/split2 ./node_modules/split2
+COPY --from=builder /app/node_modules/drizzle-orm ./node_modules/drizzle-orm
 # next-auth / @auth packages
 COPY --from=builder /app/node_modules/next-auth ./node_modules/next-auth
 COPY --from=builder /app/node_modules/@auth ./node_modules/@auth
