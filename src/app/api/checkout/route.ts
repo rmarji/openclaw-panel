@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
-      allow_promotion_codes: !couponCode,
       metadata: {
         tier: tier?.slug || "unknown",
         billing_period: billingPeriod,
@@ -37,6 +36,9 @@ export async function POST(req: NextRequest) {
         (c) => c.code.toUpperCase() === couponCode.toUpperCase()
       );
       params.discounts = [{ coupon: coupon?.stripeCouponId || couponCode }];
+    } else {
+      // Only allow manual promo codes if no auto-applied coupon
+      params.allow_promotion_codes = true;
     }
 
     const session = await stripe.checkout.sessions.create(params);
