@@ -154,6 +154,7 @@ function TypingIndicator() {
 
 export function LiveDemo() {
   const ref = useRef<HTMLDivElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [activeScenario, setActiveScenario] = useState(0);
   const [visibleMessages, setVisibleMessages] = useState<number[]>([]);
@@ -186,6 +187,12 @@ export function LiveDemo() {
     return () => timeouts.forEach(clearTimeout);
   }, [isInView, activeScenario]);
 
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" });
+    }
+  }, [visibleMessages, showTyping]);
+
   function switchScenario(idx: number) {
     setActiveScenario(idx);
     setHasPlayed((prev) => new Set(prev).add(idx));
@@ -196,9 +203,9 @@ export function LiveDemo() {
       <div className="section-divider mb-24" />
 
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Left copy - adapts per tab */}
-          <div>
+          <div className="lg:sticky lg:top-24">
             <span className="label-mono">See it work</span>
             <AnimatePresence mode="wait">
               <motion.div
@@ -281,7 +288,7 @@ export function LiveDemo() {
                 </span>
               </div>
 
-              <div className="flex min-h-[340px] flex-col gap-3 p-5">
+              <div ref={chatRef} className="h-[420px] overflow-y-auto flex-col gap-3 p-5 flex">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeScenario}
